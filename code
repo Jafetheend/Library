@@ -1,0 +1,318 @@
+#include <iostream>
+using namespace std;
+#include <vector>
+#include <algorithm>
+#include <iomanip>
+
+
+class Book{
+
+  private:
+    string title;
+    string author;
+    int pages;
+    int year;
+
+  public:
+    Book(){
+      title = "null";
+      author = "null";
+      pages = 0;
+      year = 0;
+    }
+    Book(string title)
+    {
+      this->title = title;
+      this->author = "null";
+    }
+
+    Book(string title,string author,int pages,int year)
+    {
+       this->title = title;
+       this->author = author;
+       this->pages = pages;
+       this->year = year;
+    }
+//getters
+    string getTitle()
+    {
+      return title;
+    }
+    string getAuthor()
+    {
+      return author;
+    }
+    int getPages(){return pages;}
+    int getYear(){return year;}
+
+//Seters
+    void setTitle(string title)
+    {
+      this->title = title;
+    }
+    void setAuthor(string author)
+    {
+      this->author = author;
+    }
+    void setPages(int pages)
+    {
+      this->pages = pages;
+    }
+    void setYear(int year)
+    {
+      this->year = year;
+    }
+  
+  void clear()
+  {
+    title = "";
+  }
+
+};
+
+//fillVector with elements of objects of Book class
+void fillVector(vector<Book> &);
+
+//main
+
+void fillVector(vector<Book> & newlibrary)
+{
+  string userIn;
+  int userIn2;
+
+  string title;
+  string author;
+  int pages;
+  int year;
+
+   cout << "   **** Welcome to E-Library ****" << endl;
+   cout << "How many Books would you like to enter: ";
+   cin >> userIn2;
+  while(userIn2 > 0)
+  {
+    cout << " Title:";
+    cin.ignore();
+    getline(cin, title);
+    cout << " Author:";
+    getline(cin, author);
+    cout << " Pages:";
+    cin >> pages;
+    cout << " Year published:";
+    cin >> year;
+
+    Book newbook(title,author,pages,year);
+    newlibrary.push_back(newbook);
+    
+    userIn2--;
+    cout << "*******************************" << endl;
+  }
+}
+
+
+//swap
+void swapping(int &a, int &b) {
+   int temp;
+   temp = a;
+   a = b;
+   b = temp;
+}
+
+
+//selection sort
+  void selectionSort(vector <Book> & library, int size) {
+   int i, j, imin;
+   for(i = 0; i<size-1; i++) {
+      imin = i;   //get index of minimum data
+      for(j = i+1; j<size; j++)
+          
+         if(library.at(j).getTitle() < library.at(imin).getTitle())
+            imin = j;
+         //placing in correct position
+         swap(library.at(i), library.at(imin));
+   }
+}
+
+
+
+
+int main() {
+  string newtitle;
+  string newauthor;
+  int newpages;
+  int newyear;
+  string userIn;
+  int userIn2;
+  int temp;
+  char userIn3;;
+  vector <Book> library;
+
+  fillVector(library);
+  /*for(int i = 0; i < library.size();i++)
+  {
+    cout << library.at(i).getTitle();
+  }
+  */
+  cout << endl;
+  while(true)
+  {
+    //menu
+    cout << "MENU\na - Add Book\ne - Add Book title only \nr - Remove Book\nv - View Library\nb - Reverse BookOrder\ni - Get Book Info\nn - Recent Book\ns - Sort Library Alphabetically \nq - Quit\n\nChoose an option:" << endl;
+
+    cin >> userIn3;
+
+    switch(userIn3)
+    {
+    
+      case 'e':
+      {
+        cout << "Enter title:" << endl;
+        cin.ignore();
+        getline(cin, newtitle);
+        Book newbook(newtitle);
+        library.push_back(newbook);
+
+
+      }
+      break;
+
+      case 'a':
+      {
+        cout << "--adding book--" << endl;
+        cout << " Title:";
+        cin.ignore();
+        getline(cin, newtitle);
+        cout << " Author:";
+        getline(cin, newauthor);
+        cout << " Pages:";
+        cin >> newpages;
+        cout << " Year Published:";
+        cin >> newyear;
+        
+        //initializes a new book and puts in the end of vector
+        Book newbook(newtitle,newauthor,newpages,newyear);
+        library.push_back(newbook);
+        cout << endl;
+
+      }
+      break;
+      case 'q':
+      {
+        return 0;
+      }
+      break;
+  
+      case 'v':
+      {
+        cout << "                ~ Library ~"<< endl;// overview all books info/detail
+        cout << "*********************************************" <<endl;
+        cout << left;// shift all thing(s) to the left
+        cout << setprecision(3); //built in function that comes with the iomanip, and set up space precision in 3
+        cout << setw(10) << "Title" << setw(8) << "Author" << setw(12) << "Page(s)"  << "Year Published\n"; // header
+        cout << "*********************************************" <<endl;
+          for ( int i = 0; i < library.size(); i++){
+            if (library.at(i).getTitle() != "")
+            {
+// print out all the date from user type
+                cout << setw(10) << library.at(i).getTitle() << setw(8) << library.at(i).getAuthor()<< setw(12) <<  library.at(i).getPages() <<  setw(12) << library.at(i).getYear() << endl;
+            }
+            if (library.at(i).getTitle() == "")
+            {
+            }
+            }
+            for (int i = 0; i < 45; i++) // ouput 45 times "*
+            {
+                
+                cout << "*";
+    
+            }
+            cout << endl;
+      }
+
+      break;
+   
+      case 'r':
+      {
+        cout << "--Deleting book--" << endl;
+        cout << "Title of book you'd like to delete: ";
+        cin.ignore();
+        getline(cin, userIn);
+        for(int i = 0; i < library.size(); i++)
+        {
+          if(library.at(i).getTitle() == userIn)
+          {
+            //sets title of book to nothing.
+            library.at(i).clear();
+          }
+        }
+        cout << endl;
+      }
+      break;
+    
+        case 'i': //Gets the author, title , year , pages of a book with a title input.
+        {
+          cout << "Enter title: ";
+          string searchBook;
+          cin.ignore();
+          getline(cin, searchBook);
+          cout << "*******************************" << endl;
+          
+          for(int i = 0; i < library.size(); i++)
+          {
+            if(searchBook == library.at(i).getTitle())
+            {
+              cout << "Title: " << library.at(i).getTitle() << endl;
+              cout << "Author: " << library.at(i).getAuthor() << endl;
+              cout << "Pages: " << library.at(i).getPages() << endl;
+              cout << "Year: " << library.at(i).getYear() << endl;
+            }
+          }
+   
+        }
+        break;
+        case 'b':
+        {
+          cout << "    ~ Library Reversed ~" << endl;
+            reverse(library.begin(), library.end());
+              for(int i = 0; i < library.size(); i++)
+                cout << library.at(i).getTitle() << endl;
+        
+        }
+      break;
+      
+      case 'n':
+        {
+            cout << "--Searching for Book with most recent Year--" << endl;
+            int highestyear;
+            string temp;
+            cout << "*******************************" << endl;
+            highestyear =library.at(0).getYear();
+            temp = library.at(0).getTitle();
+            for(int i = 0; i < library.size(); i++) {
+                if (highestyear < library.at(i).getYear()) {
+                    highestyear = library.at(i).getYear();
+                    temp = library.at(i).getTitle();
+                }
+               
+            }
+            
+            cout << "Title: " << temp << endl;
+            cout << "Year: " << highestyear << endl;
+            
+        }
+      case 's':
+      {
+        cout << "--Sorting Books--" << endl;
+        selectionSort(library,library.size());
+      }
+      
+    break;
+
+      default:
+      {
+        break;
+      }
+    }
+  
+  }
+  
+}
